@@ -2,6 +2,8 @@
 
 Show your code from any Github repo file or diff by simply dropping in an (almost) ordinary `<code>` tag into your HTML.
 
+Check out the [demo](http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/example.html)
+
 ## Install
 
 *dependencies:*

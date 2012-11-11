@@ -8,38 +8,62 @@
 
   <title>Github API Example</title>
 
-  <link rel="stylesheet" type="text/css" href="http://cdn.sitepress.cc.s3.amazonaws.com/libs/bootstrap/default/stylesheets/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="http://cdn.sitepress.cc.s3.amazonaws.com/libs/foundation/stylesheets/foundation.min.css" />
   <link rel="stylesheet" type="text/css" href="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/themes/twilight.css" />
   <link rel="stylesheet" type="text/css" href="http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/twilight.extras.css" />
   <style type="text/css">
+    code{
+      background: transparent;
+    }
 
+    pre{
+      padding: 20px;
+    }
+
+    pre.input{
+      color: #333;
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+    }
   </style>
-
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="container row">
 
-    <div class="hero-unit">
+    <div class="panel">
       <h1>jQuery.GithubCode</h1>
       <p>Easily pull code from your Github repo and display it on any HTML page.</p>
     </div>
 
     <h2>Get one file:</h2>
-    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="src/jquery.githubcode.js"></code>
+    <span>Source:</span>
+    <pre class="input">&lt;code class="github" data-repo="christiannaths/jquery.githubcode" data-path="example.html">&lt;/code></pre>
+    <span>Result:</span>
+    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="example.html"></code>
 
     <h2>Get one file at a branch or tag:</h2>
-    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="src/jquery.githubcode.js" data-ref="master"></code>
+    <span>Source:</span>
+    <pre class="input">&lt;code class="github" data-repo="christiannaths/jquery.githubcode" data-path="example.html" data-ref="master">&lt;/code></pre>
+    <span>Result:</span>
+    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="example.html" data-ref="master"></code>
 
     <h2>Get the diff for one file at a specific commit:</h2>
-    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="src/jquery.githubcode.js" data-ref="75176542c1ec7a26df39c5bc7c1ba306b842dedc"></code>
+    <span>Source:</span>
+    <pre class="input">&lt;code class="github" data-repo="christiannaths/jquery.githubcode" data-path="example.html" data-ref="b33ea58972734d51b466dd488728196770cbf561">&lt;/code></pre>
+    <span>Result:</span>
+    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="example.html" data-ref="b33ea58972734d51b466dd488728196770cbf561"></code>
 
     <h2>Get diffs for all files at a specific commit:</h2>
-    <code class="github" data-repo="christiannaths/jquery.githubcode" data-ref="75176542c1ec7a26df39c5bc7c1ba306b842dedc"></code>
+    <span>Source:</span>
+    <pre class="input">&lt;code class="github" data-repo="christiannaths/jquery.githubcode" data-ref="df4644a8d94913f7af83fcf32ca224a3b3a390ae">&lt;/code></pre>
+    <span>Result:</span>
+    <code class="github" data-repo="christiannaths/jquery.githubcode" data-ref="df4644a8d94913f7af83fcf32ca224a3b3a390ae"></code>
   </div>
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/foundation/javascripts/foundation.min.js"></script>
   <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/rainbow.js"></script>
   <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/language/html.js"></script>
   <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/language/css.js"></script>
