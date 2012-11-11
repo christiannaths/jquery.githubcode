@@ -1,6 +1,6 @@
 # jQuery.GithubCode
 
-Show your code from any Github repo file or diff by simply dropping in an (almost) ordinary &lt;code> tag into your HTML.
+Show your code from any Github repo file or diff by simply dropping in an (almost) ordinary `<code>` tag into your HTML.
 
 ## Install
 
@@ -9,19 +9,17 @@ Show your code from any Github repo file or diff by simply dropping in an (almos
 Include jquery, jquery.githubcode.js, along with Rainbow for highlighting.
 
 ```html
-&lt;link rel="stylesheet" type="text/css" href="stylesheets/rainbow/themes/twilight.css" />
+<link rel="stylesheet" type="text/css" href="stylesheets/rainbow/themes/twilight.css" />
 
-&lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">&lt;/script>
-&lt;script type="text/javascript" src="javascripts/rainbow/rainbow.js">&lt;/script>
-&lt;script type="text/javascript" src="javascripts/jquery.githubcode.js">&lt;/script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="javascripts/rainbow/rainbow.js"></script>
+<script type="text/javascript" src="javascripts/jquery.githubcode.js"></script>
 ```
 
-Fire the plugin on all classes of `&lt;code class="github">&lt;/code>
+Fire the plugin on all classes of `<code class="github"></code>`
 
 ```javascript
-&lt;script type="text/javascript">
-    $('code.github').githubcode();
-&lt;/script>
+$('code.github').githubcode();
 ```
 
 ## Usage
@@ -29,23 +27,23 @@ Fire the plugin on all classes of `&lt;code class="github">&lt;/code>
 ### Get one file:
 
 ```html
-&lt;code class="github" data-repo="christiannaths/jquery.githubcode" data-path="jquery.githubcode.js">&lt;/code>
+<code class="github" data-repo="christiannaths/jquery.githubcode" data-path="jquery.githubcode.js"></code>
 ```
-    
+
 ### Get one file at a branch or tag:
 
 ```html
-&lt;code class="github" data-repo="christiannaths/jquery.githubcode" data-path="jquery.githubcode.js" data-ref="master">&lt;/code>
+<code class="github" data-repo="christiannaths/jquery.githubcode" data-path="jquery.githubcode.js" data-ref="master"></code>
 ```
 
 ### Get the diff for one file at a specific commit:
 
 ```html
-&lt;code class="github" data-repo="christiannaths/jquery.githubcode" data-path="jquery.githubcode.js" data-ref="75176542c1ec7a26df39c5bc7c1ba306b842dedc">&lt;/code>
+<code class="github" data-repo="christiannaths/jquery.githubcode" data-path="jquery.githubcode.js" data-ref="75176542c1ec7a26df39c5bc7c1ba306b842dedc"></code>
 ```
 
 ### Get diffs for all files at a specific commit:
 
 ```html
-&lt;code class="github" data-repo="christiannaths/jquery.githubcode" data-ref="75176542c1ec7a26df39c5bc7c1ba306b842dedc">&lt;/code>
+<code class="github" data-repo="christiannaths/jquery.githubcode" data-ref="75176542c1ec7a26df39c5bc7c1ba306b842dedc"></code>
 ```
