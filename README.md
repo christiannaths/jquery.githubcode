@@ -4,7 +4,10 @@ Show your code from any Github repo file or diff by simply dropping in an (almos
 
 ## Install
 
-*dependencies:* [Rainbow](https://github.com/ccampbell/rainbow)
+*dependencies:*
+
++ [jQuery](http://jquery.com)
++ [Rainbow](https://github.com/ccampbell/rainbow)
 
 Include jquery, jquery.githubcode.js, along with Rainbow for highlighting.
 
