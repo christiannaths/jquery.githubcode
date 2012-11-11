@@ -8,80 +8,36 @@
 
   <title>Github API Example</title>
 
-  <!-- <link rel="stylesheet" type="text/css" href="http://cdn.sitepress.cc.s3.amazonaws.com/libs/prism/prism-custom.css" /> -->
+  <link rel="stylesheet" type="text/css" href="http://cdn.sitepress.cc.s3.amazonaws.com/libs/bootstrap/default/stylesheets/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/themes/twilight.css" />
+  <link rel="stylesheet" type="text/css" href="http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/twilight.extras.css" />
   <style type="text/css">
-    pre{
-      background: #262626;
-    }
 
-
-    code {
-      counter-reset: linenumber 5;
-    }
-
-    span.line{
-      counter-increment: linenumber;
-      display: block;
-      line-height: 1.5;
-    }
-
-    span.line:before{
-      content: counter(linenumber);
-      font-size: 100%;
-      width: 3em;
-      display: inline-block;
-      font-weight: normal;
-      color: #ccc;
-      margin-right: 10px;
-      text-align: right;
-    }
-
-    span.line.no-number:before{
-      content: '';
-    }
-
-    span.line.added{
-      background: #121212;
-    }
-
-    span.line.added:before{
-      content: '+ 'counter(linenumber);
-      color: #7C8D57;
-    }
-
-    span.line.removed{
-      text-decoration: line-through;
-      opacity: 0.5;
-    }
   </style>
 
 </head>
 
 <body>
-  <h1>Test Some Code Blocks</h1>
 
-  <!-- <code class="github" data-repo="nait-dmit/DMIT206-jquery-image-slider" data-path="index.html" data-ref="2affb5860c8ce0a7591f8ee24047a839c614b084"></code> -->
-  <!-- <code class="github" data-repo="nait-dmit/DMIT206-jquery-image-slider" data-path="index.html" data-ref="part-1"></code>
-  <code class="github" data-repo="nait-dmit/DMIT206-jquery-image-slider" data-path="index.html" data-ref="part-1"></code>
-  <code class="github" data-repo="nait-dmit/DMIT206-jquery-image-slider" data-path="index.html" data-ref="part-1"></code>
-  <code class="github" data-repo="nait-dmit/DMIT206-jquery-image-slider" data-path="index.html" data-ref="part-1"></code> -->
-  <!-- <code class="github" data-repo="nait-dmit/DMIT206-jquery-image-slider" data-ref="2affb5860c8ce0a7591f8ee24047a839c614b084"></code> -->
-  <!-- <code class="github" data-repo="christiannaths/versioned_as" data-ref="master" data-path="versioned_as.js"></code> -->
-  <!-- <code class="github" data-repo="christiannaths/versioned_as" data-path="versioned_as.js"></code> -->
-  <!-- <code class="github" data-repo="ccampbell/rainbow" data-ref="8dc10e164edb8a500469b1f161c630288bc50a76"></code> -->
-  <code class="github" data-repo="christiannaths/designbattle" data-ref="4909265bbad2b4ed6f5196bd3556b607fd62ffd6"></code>
-  <!-- <code class="github" data-repo="nait-dmit/DMIT206-jquery-image-slider" data-path="index.html" data-ref="aaf2390c7f22c97c8c938a74c36152fb9a45ca18"></code> -->
+  <div class="container">
+    <h2>Get one file:</h2>
+    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="src/jquery.githubcode.js"></code>
 
-  <h2>Some other stuff too</h2>
-  <!-- <code class="github" data-repo="christiannaths/designbattle" data-ref="132d02a699ded73f92148d44e0953faaaef91128"></code> -->
+    <h2>Get one file at a branch or tag:</h2>
+    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="src/jquery.githubcode.js" data-ref="master"></code>
 
+    <h2>Get the diff for one file at a specific commit:</h2>
+    <code class="github" data-repo="christiannaths/jquery.githubcode" data-path="src/jquery.githubcode.js" data-ref="75176542c1ec7a26df39c5bc7c1ba306b842dedc"></code>
 
-
-
+    <h2>Get diffs for all files at a specific commit:</h2>
+    <code class="github" data-repo="christiannaths/jquery.githubcode" data-ref="75176542c1ec7a26df39c5bc7c1ba306b842dedc"></code>
+  </div>
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/rainbow-custom.min.js"></script>
+  <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/rainbow.js"></script>
+  <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/language/html.js"></script>
+  <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/language/css.js"></script>
+  <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/language/javascript.js"></script>
   <script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/jquery.githubcode.js"></script>
   <script type="text/javascript">
     $('code.github').githubcode();
