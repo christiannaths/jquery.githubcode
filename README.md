@@ -41,12 +41,11 @@ Add a ```<code>``` tag to your markup, sprinkle in ```data-repo=":owner/:repo"``
 
 ### Parameters
 
-+ data-repo
-  + Mandatory string - the Github repository to be used; in the form of :owner/:repo, where :owner is the Github username, and :repo is the name of the Github repository.
-+ data-path
-  + Optional string - The content path.
-+ data-ref
-  + Optional string - The String name of the Commit/Branch/Tag. Defaults to master.
+```data-repo``` *Mandatory string - the Github repository to be used; in the form of :owner/:repo, where :owner is the Github username, and :repo is the name of the Github repository.*
+
+```data-path``` *Optional string - The content path.*
+
+```data-ref``` *Optional string - The String name of the Commit/Branch/Tag. Defaults to master.*
 
 
 ## Examples
