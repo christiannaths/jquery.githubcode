@@ -4,6 +4,8 @@ Show your code from any Github repo file or diff by simply dropping in an (almos
 
 Check out the [demo](http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/example.html)
 
+*__Note:__ This is a very early release (probably too early), and there are a few known bugs I'm currently working on. Feel free to file an issue for any bugs you find or feature requests you might have.*
+
 ## Install
 
 *dependencies:*
