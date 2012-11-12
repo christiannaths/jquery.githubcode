@@ -9,11 +9,12 @@ do ($ = jQuery, window) ->
 
     options = $.extend( {}, $.fn.githubcode.options, options )
 
+
     this.each ->
       $this = $(this)
+      $.extend $this.data(), options
 
-
-      step1 = fetchCode()
+      step1 = fetchCode( $this )
 
       step2 = step1.pipe (msg) ->
         highlightCode(msg)
@@ -39,29 +40,68 @@ do ($ = jQuery, window) ->
 
   # Our utility functions
   # $.fn.extend
-  fetchCode = ( repo, path, ref ) ->
+  fetchCode = ( $this ) ->
     # Should return an array of code tags, containing
     # the unaltered code from the requested file.
-    #
-    # Example of a custom deferred object
-    # var dfr = $.Deferred();
-    #     $.ajax({
-    #      url:"http://search.twitter.com/search.json",
-    #      data:{q:query},
-    #      dataType:'jsonp',
-    #      success:dfr.resolve
-    #     });
-    #     return dfr.promise();
 
-    dfd = $.Deferred()
+    codeblocks = new Array()
+    deferred = new $.Deferred()
+    api = $this.data('api')
+    repo = $this.data('repo')
+    path = $this.data('path')
+    ref = $this.data('ref')
 
-    setTimeout ->
-      console.log "start", 'fetched'
-      dfd.resolve('fetched')
-    ,
-    1000
+    # console.log repo, path, ref
 
-    dfd
+
+
+
+
+    repoExists= repo?
+    pathExists = path?
+    refExists = ref?
+    sha1Test = /^[0-9a-f]{40}$/i;
+    refIsHash = sha1Test.test(ref);
+
+    #  !hasPath && hasRef && refIsHash
+    if repoExists and refIsHash
+      method = 'commits'
+      request_url = [api, repo, method, ref].join('/')
+      data_type = 'json' if $this.data('debug') is true
+      request_url = "test/data/diffs.json" if $this.data('debug') is true
+
+    else if repoExists and pathExists and not refIsHash
+      method = 'contents'
+      request_url = [api, repo, method, path].join('/') + "?ref=#{ ref or 'master' }"
+      data_type = 'html' if $this.data('debug') is true
+      request_url = "test/data/single.html" if $this.data('debug') is true
+
+    else
+      console.error("Options provided were not sufficient to make the request. Aborting.")
+      # fail the deferred here?
+
+    # console.log request_url
+
+
+
+
+    $.ajax
+      url: request_url,
+      type: 'GET',
+      dataType: data_type,
+      headers: { 'Accept': 'application/vnd.github.v3.raw' },
+      success: (response) ->
+
+        if typeof response is 'object'
+          $.each response.files, (i, file) ->
+            codeblocks.push file.patch
+        else
+          codeblocks.push response
+
+        deferred.resolve(codeblocks)
+
+
+    return deferred
 
     # dfd.promise()
 
@@ -70,15 +110,9 @@ do ($ = jQuery, window) ->
     # the sytnax highlighted, line-wrapped code from
     # the requested file.
 
-    dfd = $.Deferred()
+    $.each codeblocks, (i, codeblock) ->
 
-    setTimeout ->
-      console.log "retrieved from #{ codeblocks }", 'highlighted'
-      dfd.resolve('highlighted')
-    ,
-    1000
-
-    dfd
+      console.log codeblock
 
   insertCode = ( codeblocks, $target )->
     # Returns nothing, injects each code tag into

@@ -7,7 +7,8 @@
     return this.each(function() {
       var $this, step1, step2, step3;
       $this = $(this);
-      step1 = fetchCode();
+      $.extend($this.data(), options);
+      step1 = fetchCode($this);
       step2 = step1.pipe(function(msg) {
         return highlightCode(msg);
       });
@@ -21,23 +22,64 @@
     'debug': false,
     afterInsert: function() {}
   };
-  fetchCode = function(repo, path, ref) {
-    var dfd;
-    dfd = $.Deferred();
-    setTimeout(function() {
-      console.log("start", 'fetched');
-      return dfd.resolve('fetched');
-    }, 1000);
-    return dfd;
+  fetchCode = function($this) {
+    var api, codeblocks, data_type, deferred, method, path, pathExists, ref, refExists, refIsHash, repo, repoExists, request_url, sha1Test;
+    codeblocks = new Array();
+    deferred = new $.Deferred();
+    api = $this.data('api');
+    repo = $this.data('repo');
+    path = $this.data('path');
+    ref = $this.data('ref');
+    repoExists = repo != null;
+    pathExists = path != null;
+    refExists = ref != null;
+    sha1Test = /^[0-9a-f]{40}$/i;
+    refIsHash = sha1Test.test(ref);
+    if (repoExists && refIsHash) {
+      method = 'commits';
+      request_url = [api, repo, method, ref].join('/');
+      if ($this.data('debug') === true) {
+        data_type = 'json';
+      }
+      if ($this.data('debug') === true) {
+        request_url = "test/data/diffs.json";
+      }
+    } else if (repoExists && pathExists && !refIsHash) {
+      method = 'contents';
+      request_url = [api, repo, method, path].join('/') + ("?ref=" + (ref || 'master'));
+      if ($this.data('debug') === true) {
+        data_type = 'html';
+      }
+      if ($this.data('debug') === true) {
+        request_url = "test/data/single.html";
+      }
+    } else {
+      console.error("Options provided were not sufficient to make the request. Aborting.");
+    }
+    $.ajax({
+      url: request_url,
+      type: 'GET',
+      dataType: data_type,
+      headers: {
+        'Accept': 'application/vnd.github.v3.raw'
+      },
+      success: function(response) {
+        if (typeof response === 'object') {
+          $.each(response.files, function(i, file) {
+            return codeblocks.push(file.patch);
+          });
+        } else {
+          codeblocks.push(response);
+        }
+        return deferred.resolve(codeblocks);
+      }
+    });
+    return deferred;
   };
   highlightCode = function(codeblocks) {
-    var dfd;
-    dfd = $.Deferred();
-    setTimeout(function() {
-      console.log("retrieved from " + codeblocks, 'highlighted');
-      return dfd.resolve('highlighted');
-    }, 1000);
-    return dfd;
+    return $.each(codeblocks, function(i, codeblock) {
+      return console.log(codeblock);
+    });
   };
   return insertCode = function(codeblocks, $target) {
     var dfd;

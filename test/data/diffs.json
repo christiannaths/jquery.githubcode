@@ -1,0 +1,74 @@
+{
+  "files": [
+    {
+      "filename": "README.md",
+      "contents_url": "https://api.github.com/repos/christiannaths/jquery.githubcode/contents/README.md?ref=df4644a8d94913f7af83fcf32ca224a3b3a390ae",
+      "status": "modified",
+      "additions": 24,
+      "deletions": 2,
+      "sha": "9f498d60f9932737c0fd9cd6c6256a396fb94cb2",
+      "changes": 26,
+      "raw_url": "https://github.com/christiannaths/jquery.githubcode/raw/df4644a8d94913f7af83fcf32ca224a3b3a390ae/README.md",
+      "blob_url": "https://github.com/christiannaths/jquery.githubcode/blob/df4644a8d94913f7af83fcf32ca224a3b3a390ae/README.md",
+      "patch": "@@ -9,14 +9,22 @@ Show your code from any Github repo file or diff by simply dropping in an (almos\n + [jQuery](http://jquery.com)\n + [Rainbow](https://github.com/ccampbell/rainbow)\n \n-Include jquery, jquery.githubcode.js, along with Rainbow for highlighting.\n+Include dependencies. *see the Rainbow readme for instructions on how to use Rainbow.*\n \n ```html\n <link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheets/rainbow/themes/twilight.css\" />\n \n <script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\"></script>\n <script type=\"text/javascript\" src=\"javascripts/rainbow/rainbow.js\"></script>\n-<script type=\"text/javascript\" src=\"javascripts/jquery.githubcode.js\"></script>\n+<script type=\"text/javascript\" src=\"javascripts/rainbow/language/html.js\"></script>\n+<script type=\"text/javascript\" src=\"javascripts/rainbow/language/css.js\"></script>\n+<script type=\"text/javascript\" src=\"javascripts/rainbow/language/javascript.js\"></script>\n+```\n+\n+Include jquery.githubcode\n+\n+```html\n+<script type=\"text/javascript\" src=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/jquery.githubcode.js\"></script>\n ```\n \n Fire the plugin on all classes of `<code class=\"github\"></code>`\n@@ -27,6 +35,20 @@ $('code.github').githubcode();\n \n ## Usage\n \n+Add a ```<code>``` tag to your markup, sprinkle in ```data-repo=\":owner/:repo\"```, ```data-path=\":path\"```, and ```data-ref=\":ref\"``` as you see fit.\n+\n+### Parameters\n+\n++ data-repo\n+  + Mandatory string - the Github repository to be used; in the form of :owner/:repo, where :owner is the Github username, and :repo is the name of the Github repository.\n++ data-path\n+  + Optional string - The content path.\n++ data-ref\n+  + Optional string - The String name of the Commit/Branch/Tag. Defaults to master.\n+\n+\n+## Examples\n+\n ### Get one file:\n \n ```html"
+    },
+    {
+      "filename": "example.html",
+      "contents_url": "https://api.github.com/repos/christiannaths/jquery.githubcode/contents/example.html?ref=df4644a8d94913f7af83fcf32ca224a3b3a390ae",
+      "status": "modified",
+      "additions": 16,
+      "deletions": 60,
+      "sha": "a3e5425d1df3eb4bf4564a66b520279ad174ae15",
+      "changes": 76,
+      "raw_url": "https://github.com/christiannaths/jquery.githubcode/raw/df4644a8d94913f7af83fcf32ca224a3b3a390ae/example.html",
+      "blob_url": "https://github.com/christiannaths/jquery.githubcode/blob/df4644a8d94913f7af83fcf32ca224a3b3a390ae/example.html",
+      "patch": "@@ -8,80 +8,36 @@\n \n   <title>Github API Example</title>\n \n-  <!-- <link rel=\"stylesheet\" type=\"text/css\" href=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/prism/prism-custom.css\" /> -->\n+  <link rel=\"stylesheet\" type=\"text/css\" href=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/bootstrap/default/stylesheets/bootstrap.min.css\" />\n   <link rel=\"stylesheet\" type=\"text/css\" href=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/themes/twilight.css\" />\n+  <link rel=\"stylesheet\" type=\"text/css\" href=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/twilight.extras.css\" />\n   <style type=\"text/css\">\n-    pre{\n-      background: #262626;\n-    }\n \n-\n-    code {\n-      counter-reset: linenumber 5;\n-    }\n-\n-    span.line{\n-      counter-increment: linenumber;\n-      display: block;\n-      line-height: 1.5;\n-    }\n-\n-    span.line:before{\n-      content: counter(linenumber);\n-      font-size: 100%;\n-      width: 3em;\n-      display: inline-block;\n-      font-weight: normal;\n-      color: #ccc;\n-      margin-right: 10px;\n-      text-align: right;\n-    }\n-\n-    span.line.no-number:before{\n-      content: '';\n-    }\n-\n-    span.line.added{\n-      background: #121212;\n-    }\n-\n-    span.line.added:before{\n-      content: '+ 'counter(linenumber);\n-      color: #7C8D57;\n-    }\n-\n-    span.line.removed{\n-      text-decoration: line-through;\n-      opacity: 0.5;\n-    }\n   </style>\n \n </head>\n \n <body>\n-  <h1>Test Some Code Blocks</h1>\n-\n-  <!-- <code class=\"github\" data-repo=\"nait-dmit/DMIT206-jquery-image-slider\" data-path=\"index.html\" data-ref=\"2affb5860c8ce0a7591f8ee24047a839c614b084\"></code> -->\n-  <!-- <code class=\"github\" data-repo=\"nait-dmit/DMIT206-jquery-image-slider\" data-path=\"index.html\" data-ref=\"part-1\"></code>\n-  <code class=\"github\" data-repo=\"nait-dmit/DMIT206-jquery-image-slider\" data-path=\"index.html\" data-ref=\"part-1\"></code>\n-  <code class=\"github\" data-repo=\"nait-dmit/DMIT206-jquery-image-slider\" data-path=\"index.html\" data-ref=\"part-1\"></code>\n-  <code class=\"github\" data-repo=\"nait-dmit/DMIT206-jquery-image-slider\" data-path=\"index.html\" data-ref=\"part-1\"></code> -->\n-  <!-- <code class=\"github\" data-repo=\"nait-dmit/DMIT206-jquery-image-slider\" data-ref=\"2affb5860c8ce0a7591f8ee24047a839c614b084\"></code> -->\n-  <!-- <code class=\"github\" data-repo=\"christiannaths/versioned_as\" data-ref=\"master\" data-path=\"versioned_as.js\"></code> -->\n-  <!-- <code class=\"github\" data-repo=\"christiannaths/versioned_as\" data-path=\"versioned_as.js\"></code> -->\n-  <!-- <code class=\"github\" data-repo=\"ccampbell/rainbow\" data-ref=\"8dc10e164edb8a500469b1f161c630288bc50a76\"></code> -->\n-  <code class=\"github\" data-repo=\"christiannaths/designbattle\" data-ref=\"4909265bbad2b4ed6f5196bd3556b607fd62ffd6\"></code>\n-  <!-- <code class=\"github\" data-repo=\"nait-dmit/DMIT206-jquery-image-slider\" data-path=\"index.html\" data-ref=\"aaf2390c7f22c97c8c938a74c36152fb9a45ca18\"></code> -->\n-\n-  <h2>Some other stuff too</h2>\n-  <!-- <code class=\"github\" data-repo=\"christiannaths/designbattle\" data-ref=\"132d02a699ded73f92148d44e0953faaaef91128\"></code> -->\n \n+  <div class=\"container\">\n+    <h2>Get one file:</h2>\n+    <code class=\"github\" data-repo=\"christiannaths/jquery.githubcode\" data-path=\"src/jquery.githubcode.js\"></code>\n \n+    <h2>Get one file at a branch or tag:</h2>\n+    <code class=\"github\" data-repo=\"christiannaths/jquery.githubcode\" data-path=\"src/jquery.githubcode.js\" data-ref=\"master\"></code>\n \n+    <h2>Get the diff for one file at a specific commit:</h2>\n+    <code class=\"github\" data-repo=\"christiannaths/jquery.githubcode\" data-path=\"src/jquery.githubcode.js\" data-ref=\"75176542c1ec7a26df39c5bc7c1ba306b842dedc\"></code>\n \n+    <h2>Get diffs for all files at a specific commit:</h2>\n+    <code class=\"github\" data-repo=\"christiannaths/jquery.githubcode\" data-ref=\"75176542c1ec7a26df39c5bc7c1ba306b842dedc\"></code>\n+  </div>\n \n   <script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\"></script>\n-  <script type=\"text/javascript\" src=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/rainbow-custom.min.js\"></script>\n+  <script type=\"text/javascript\" src=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/rainbow.js\"></script>\n+  <script type=\"text/javascript\" src=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/language/html.js\"></script>\n+  <script type=\"text/javascript\" src=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/language/css.js\"></script>\n+  <script type=\"text/javascript\" src=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/rainbow/language/javascript.js\"></script>\n   <script type=\"text/javascript\" src=\"http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/jquery.githubcode.js\"></script>\n   <script type=\"text/javascript\">\n     $('code.github').githubcode();"
+    }
+  ],
+  "committer": {
+    "avatar_url": "https://secure.gravatar.com/avatar/ad8504d349e1d6cdbfbef12291b2bfe8?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png",
+    "url": "https://api.github.com/users/christiannaths",
+    "gravatar_id": "ad8504d349e1d6cdbfbef12291b2bfe8",
+    "id": 11584,
+    "login": "christiannaths"
+  },
+  "stats": {
+    "additions": 40,
+    "deletions": 62,
+    "total": 102
+  },
+  "commit": {
+    "tree": {
+      "sha": "6dd90e01faae8d2f04ec1c98b95ff417e1c1d950",
+      "url": "https://api.github.com/repos/christiannaths/jquery.githubcode/git/trees/6dd90e01faae8d2f04ec1c98b95ff417e1c1d950"
+    },
+    "committer": {
+      "date": "2012-11-11T19:37:55Z",
+      "email": "christiannaths@gmail.com",
+      "name": "Christian Naths"
+    },
+    "message": "cleaned up example page",
+    "comment_count": 0,
+    "url": "https://api.github.com/repos/christiannaths/jquery.githubcode/git/commits/df4644a8d94913f7af83fcf32ca224a3b3a390ae",
+    "author": {
+      "date": "2012-11-11T19:37:55Z",
+      "email": "christiannaths@gmail.com",
+      "name": "Christian Naths"
+    }
+  },
+  "sha": "df4644a8d94913f7af83fcf32ca224a3b3a390ae",
+  "author": {
+    "avatar_url": "https://secure.gravatar.com/avatar/ad8504d349e1d6cdbfbef12291b2bfe8?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png",
+    "url": "https://api.github.com/users/christiannaths",
+    "gravatar_id": "ad8504d349e1d6cdbfbef12291b2bfe8",
+    "id": 11584,
+    "login": "christiannaths"
+  },
+  "url": "https://api.github.com/repos/christiannaths/jquery.githubcode/commits/df4644a8d94913f7af83fcf32ca224a3b3a390ae",
+  "parents": [
+    {
+      "sha": "bf970de16c9b9127846f4a2522ba3e56d0bbdd3a",
+      "url": "https://api.github.com/repos/christiannaths/jquery.githubcode/commits/bf970de16c9b9127846f4a2522ba3e56d0bbdd3a"
+    }
+  ]
+}
