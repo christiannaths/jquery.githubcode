@@ -94,9 +94,21 @@ do ($ = jQuery, window) ->
 
         if typeof response is 'object'
           $.each response.files, (i, file) ->
-            codeblocks.push file.patch
+            codeblock = new Object()
+            codeblock.filename = file.filename
+            codeblock.code = file.patch
+
+            if path? and path is file.filename
+              codeblocks.push codeblock
+            else if not path?
+              codeblocks.push codeblock
+
         else
-          codeblocks.push response
+          codeblock = new Object()
+          codeblock.filename = path
+          codeblock.code = response
+
+          codeblocks.push codeblock
 
         deferred.resolve(codeblocks)
 
@@ -112,7 +124,11 @@ do ($ = jQuery, window) ->
 
     $.each codeblocks, (i, codeblock) ->
 
-      console.log codeblock
+      codelines = codeblock.code.split('\n')
+      console.log(codelines)
+      # false
+
+    # console.log codeblocks
 
   insertCode = ( codeblocks, $target )->
     # Returns nothing, injects each code tag into
@@ -128,4 +144,33 @@ do ($ = jQuery, window) ->
 
     dfd
 
+  # detectLanguage = ( path ) ->
+  #   file_ext = path.split('.').pop() or ''
+  #   lang = this.data('language') or this.data('lang');
+
+  #   // console.log(this.data('language'))
+
+  #   if (typeof lang === 'undefined'){
+  #     switch(file_ext) {
+  #       case "js":
+  #         lang = "javascript";
+  #         break;
+  #       case "java":
+  #         lang = "java";
+  #         break;
+  #       case "css":
+  #         lang = "css";
+  #         break;
+  #       case "html":
+  #         lang = "html";
+  #         break;
+  #       default:
+  #         lang = "generic";
+  #     };
+  #   };
+  #   // this.data('language', lang);
+
+  #   // console.log(this)
+
+  #   return lang;
 

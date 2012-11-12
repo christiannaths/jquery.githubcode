@@ -64,12 +64,24 @@
         'Accept': 'application/vnd.github.v3.raw'
       },
       success: function(response) {
+        var codeblock;
         if (typeof response === 'object') {
           $.each(response.files, function(i, file) {
-            return codeblocks.push(file.patch);
+            var codeblock;
+            codeblock = new Object();
+            codeblock.filename = file.filename;
+            codeblock.code = file.patch;
+            if ((path != null) && path === file.filename) {
+              return codeblocks.push(codeblock);
+            } else if (!(path != null)) {
+              return codeblocks.push(codeblock);
+            }
           });
         } else {
-          codeblocks.push(response);
+          codeblock = new Object();
+          codeblock.filename = path;
+          codeblock.code = response;
+          codeblocks.push(codeblock);
         }
         return deferred.resolve(codeblocks);
       }
@@ -78,7 +90,9 @@
   };
   highlightCode = function(codeblocks) {
     return $.each(codeblocks, function(i, codeblock) {
-      return console.log(codeblock);
+      var codelines;
+      codelines = codeblock.code.split('\n');
+      return console.log(codelines);
     });
   };
   return insertCode = function(codeblocks, $target) {
