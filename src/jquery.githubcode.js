@@ -5,6 +5,13 @@
  * Licensed under the MIT license
  */
 
+// var properties = string.split(', ');
+// var obj = {};
+// properties.forEach(function(property) {
+//     var tup = property.split(':');
+//     obj[tup[0]] = tup[1];
+// });
+
 ;(function ( $, window, document, undefined ) {
 
   $.fn.githubcode = function ( options ) {
