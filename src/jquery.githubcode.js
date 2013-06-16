@@ -6,11 +6,9 @@
   var pluginName, defaults;
   pluginName = "githubcode",
   defaults = {
-    api: {
-      ref: 'master',
-      access_token: 'f23b79399a2c6fbb411643ce79ad60029c853b97',
-      request_host: "https://api.github.com/repos"
-    },
+    ref: 'master',
+    access_token: 'f23b79399a2c6fbb411643ce79ad60029c853b97',
+    request_host: "https://api.github.com/repos",
     beforeInsert: function(){},
     afterInsert: function(){}
   };
@@ -24,7 +22,6 @@
 
     this.element = element;
     this.$element = $element;
-    this.$inserted_elements;
 
     this._defaults = defaults;
     this._name = pluginName;
@@ -39,7 +36,6 @@
       self.$inserted_elements = self.insert(data, $element, self);
     });
     request.done( function(data){
-      // console.log($inserted_elements.hasClass('.language-unknown'))
       self.options.afterInsert(self.$inserted_elements);
     });
     request.fail( function(request, msg) {
@@ -53,7 +49,7 @@
   // Our constuctor function
   GithubCode.prototype = {
     init: function() {
-      this.api = this.parseParams();
+      this.api = this.constructRequestUrl();
     },
 
     githubRequest: function(request_url){
@@ -106,7 +102,11 @@
         tmp.filename = file.filename || file.path;
         tmp.content = file.patch || Base64.decode(file.content),
         tmp.language = self.detectLanguage(tmp.filename)
-        output.files.push(tmp)
+        if(self.api.path && self.api.path === tmp.filename){
+          output.files.push(tmp);
+        } else if(!self.api.path){
+          output.files.push(tmp);
+        }
       });
 
       return output;
@@ -120,6 +120,7 @@
         'sass'    : 'sass',
         'scss'    : 'scss',
         'html'    : 'markup',
+        'htm '    : 'markup',
         'md'      : 'markup',
         'svg'     : 'markup',
         'coffee'  : 'coffeescript',
@@ -129,58 +130,68 @@
       return languages[ext];
     },
 
-    parseParams: function(){
-      if (this.url){
-        return this.parseUrlParams(this.url)
-      } else if (this.api){
-        return this.parseApiParams()
+    constructRequestUrl: function(input){
+      var params = {
+        token: this.options.access_token,
+        request_host: this.options.request_host,
+        ref: this.options.ref,
+        repo: this.options.repo,
+        owner: this.options.owner,
       };
+
+      if (this.url){
+        params = this.parseUrlParams(this.url, params)
+      } else if (this.api){
+        params = this.parseApiParams(this.api, params)
+      };
+
+      if( params.method === "commit" && !params.path) {
+        params.request_url = [params.request_host, params.owner, params.repo, "commits", params.ref].join('/') + "?access_token=" + params.token;
+      } else if( params.path ) {
+        params.request_url = [params.request_host, params.owner, params.repo, "contents", params.path].join('/') + "?ref=" + params.ref + "&access_token=" + params.token;
+      } else {
+        params.request_url = null
+      };
+
+      return params;
+
     },
 
-    parseUrlParams: function(input){
+    parseUrlParams: function(input, params){
       var url = Urlify.parse(input);
       var segments = url.pathname.split('/');
-      var output = {
-        token: this.options.api.access_token,
-        host: url.host,
-        full_path: url.pathname,
-        request_host: this.options.api.request_host
-      };
+      params.host = url.host;
+      params.full_path = url.pathname;
 
-      if( output.host === 'raw.github.com' ){
-        output.owner = segments[1];
-        output.repo = segments[2];
-        output.ref = segments[3];
-        output.path = segments.slice(4, segments.length).join('/');
+      if( params.host === 'raw.github.com' ){
+        params.owner = segments[1];
+        params.repo = segments[2];
+        params.ref = segments[3];
+        params.path = segments.slice(4, segments.length).join('/');
       } else {
-        output.owner = segments[1];
-        output.repo = segments[2];
-        output.method = segments[3];
-        output.ref = segments[4];
-        output.path = segments.slice(5, segments.length).join('/') || null;
+        params.owner = segments[1];
+        params.repo = segments[2];
+        params.method = segments[3];
+        params.ref = segments[4];
+        params.path = segments.slice(5, segments.length).join('/') || null;
       };
 
-      if( output.method === "commit") {
-        output.request_url = [output.request_host, output.owner, output.repo, "commits", output.ref].join('/') + "?access_token=" + output.token;
-      } else if( output.path ) {
-        output.request_url = [output.request_host, output.owner, output.repo, "contents", output.path].join('/') + "?ref=" + output.ref + "&access_token=" + output.token;
-      } else {
-        output.request_url = null
-      };
-
-      return output;
+      return params;
     },
 
-    parseApiParams: function(string_params) {
-      var tmp = {};
-      string_params = string_params.replace(/\s+/g, '');
-      string_params = string_params.split(',');
-      $.each(string_params, function(i, param){
+    parseApiParams: function(input, params) {
+      input = input.replace(/\s+/g, '');
+      input = input.split(',');
+      $.each(input, function(i, param){
         param = param.split(':');
-        tmp[param[0]] = param[1];
+        params[param[0]] = param[1];
       });
-      tmp.ref = tmp.ref || defaults.api.ref;
-      return tmp;
+      params.ref = params.commit || params.tag || params.ref || this.options.ref;
+      if("commit" in params) params.method = "commit";
+
+      console.log(params)
+
+      return params;
     }
   };
 
@@ -191,8 +202,6 @@
       }
     });
   };
-
-  // Self-execute the plugin
 
 
 })( jQuery, window, document );

@@ -7,71 +7,98 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Github API Example</title>
 
-  <link rel="stylesheet" type="text/css" href="./stylesheets/prism.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/stylesheets/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/stylesheets/prism.css" />
 
   <style type="text/css">
-    body{
-      width: 960px;
+    body {
+      padding-top: 60px;
+      padding-bottom: 40px;
+      max-width: 1440px;
       margin: 0 auto;
+    }
+    .sidebar-nav {
+      padding: 9px 0;
+    }
+
+    .navbar-inner .container-fluid{
+        max-width: 1440px;
+        margin: 0 auto;
+      }
+
+    @media (max-width: 980px) {
+      /* Enable use of floated navbar text */
+      .navbar-text.pull-right {
+        float: none;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
     }
   </style>
 
 </head>
 <body>
 
-  <h1>Get A Single File via GH Raw URL</h1>
-  <code>
-    &lt;code class="githubcode" data-url="https://raw.github.com/christiannaths/jquery.githubcode/master/README.md">&lt;/code>
-  </code>
-  <code class="githubcode" data-url="https://raw.github.com/christiannaths/jquery.githubcode/master/README.md"></code>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="#">jQuery GithubCode</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="active"><a href="#">About</a></li>
+            <li><a href="./examples">Examples</a></li>
+            <li><a href="#contact">Documentation</a></li>
+            <li><a href="#contact">Source</a></li>
+            <li><a href="#contact">Download</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
 
-  <h2>- but not with a regular GH URL</h2>
-  <code>
-    &lt;code class="githubcode" data-url="https://github.com/christiannaths/jquery.githubcode/blob/master/example.html">&lt;/code>
-  </code>
-  <code class="githubcode" data-url="https://github.com/christiannaths/jquery.githubcode/blob/master/example.html"></code>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span3">
+        <ul class="nav nav-list bs-docs-sidenav affix">
+          <li class="nav-header">Using URL Paramaters</li>
+          <li><a href="#">To Get One File</a></li>
+        </ul>
+      </div>
 
-  <h1>Get A Single File via GH API</h1>
-  <code>
-    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js">&lt;/code>
-  </code>
-  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js"></code>
+      <div class="span9">
+        <div class="hero-unit">
+          <h1>jQuery GithubCode</h1>
+          <p>Show code from any public Github repository.</p>
+          <p>GithubCode is a plugin for jQuery 1.7.2 or higher which will fetch code from public Github repositories for display on your website. Useful for technical blogging or tutorial writing, it allows you to maintain and update your Github repo as part of your publishing process.</p>
+          <button class="btn btn-primary btn-large">Download 1.0.1</button>
+        </div>
 
-  <h1>Get A Single File via GH API at a specific history</h1>
-  <h2>- by commit</h2>
-  <code>
-    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js, ref: 6089c601b49e456817365b96617949c6a3b05fdc">&lt;/code>
+        <section id="install">
+          <h1>Install</h1>
+          <script src="https://gist.github.com/christiannaths/e6fe27d160fd76bf457e.js"></script>
+        </section>
 
-  </code>
-  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js, ref: 6089c601b49e456817365b96617949c6a3b05fdc"></code>
-  <h2>- by branch</h2>
-  <code>
-    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js, ref: coffeescript">&lt;/code>
-  </code>
-  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js, ref: coffeescript"></code>
-  <h2>- by tag</h2>
-  <code>
-    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js, ref: v0.1.5">&lt;/code>
+        <section id="markup">
+          <h1>Markup</h1>
+          <script src="https://gist.github.com/christiannaths/c450abe550657207a43b.js"></script>
+        </section>
 
-  </code>
-  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js, ref: v0.1.5"></code>
+        <section id="use">
+          <h1>Use</h1>
+          <script src="https://gist.github.com/christiannaths/ec7a504690ef83e37095.js"></script>
+        </section>
 
-  <h1>Show All Files (Diffs) for a Commit</h1>
-  <code>
-    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, commit: 6089c601b49e456817365b96617949c6a3b05fdc">&lt;/code>
-  </code>
-  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, commit: 6089c601b49e456817365b96617949c6a3b05fdc"></code>
-
-  <h1>Show All A Specific File (Diff) for a Commit</h1>
-  <code>
-    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js, commit: 6089c601b49e456817365b96617949c6a3b05fdc">&lt;/code>
-  </code>
-  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js, commit: 6089c601b49e456817365b96617949c6a3b05fdc"></code>
-
-
-    <script src="./javascripts/jquery.min.js"></script>
-  <script src="./javascripts/prism.js"></script>
-  <script src="./javascripts/jquery.githubcode.min.js"></script>
+      </div>
+    </div>
+  </div>
+    <script src="./assets/javascripts/jquery.min.js"></script>
+  <script src="./assets/javascripts/prism.js"></script>
+  <script src="../src/jquery.githubcode.js"></script>
   <script type="text/javascript">
 
     $('.githubcode').githubcode({
