@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Github API Example</title>
+
+  <link rel="stylesheet" type="text/css" href="./stylesheets/prism.css" />
+
+  <style type="text/css">
+    body{
+      width: 960px;
+      margin: 0 auto;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>Get A Single File via GH Raw URL</h1>
+  <code>
+    &lt;code class="githubcode" data-url="https://raw.github.com/christiannaths/jquery.githubcode/master/README.md">&lt;/code>
+  </code>
+  <code class="githubcode" data-url="https://raw.github.com/christiannaths/jquery.githubcode/master/README.md"></code>
+
+  <h2>- but not with a regular GH URL</h2>
+  <code>
+    &lt;code class="githubcode" data-url="https://github.com/christiannaths/jquery.githubcode/blob/master/example.html">&lt;/code>
+  </code>
+  <code class="githubcode" data-url="https://github.com/christiannaths/jquery.githubcode/blob/master/example.html"></code>
+
+  <h1>Get A Single File via GH API</h1>
+  <code>
+    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js">&lt;/code>
+  </code>
+  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js"></code>
+
+  <h1>Get A Single File via GH API at a specific history</h1>
+  <h2>- by commit</h2>
+  <code>
+    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js, ref: 6089c601b49e456817365b96617949c6a3b05fdc">&lt;/code>
+
+  </code>
+  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js, ref: 6089c601b49e456817365b96617949c6a3b05fdc"></code>
+  <h2>- by branch</h2>
+  <code>
+    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js, ref: coffeescript">&lt;/code>
+  </code>
+  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js, ref: coffeescript"></code>
+  <h2>- by tag</h2>
+  <code>
+    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js, ref: v0.1.5">&lt;/code>
+
+  </code>
+  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js, ref: v0.1.5"></code>
+
+  <h1>Show All Files (Diffs) for a Commit</h1>
+  <code>
+    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, commit: 6089c601b49e456817365b96617949c6a3b05fdc">&lt;/code>
+  </code>
+  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, commit: 6089c601b49e456817365b96617949c6a3b05fdc"></code>
+
+  <h1>Show All A Specific File (Diff) for a Commit</h1>
+  <code>
+    &lt;code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: jquery.githubcode.js, commit: 6089c601b49e456817365b96617949c6a3b05fdc">&lt;/code>
+  </code>
+  <code class="githubcode" data-api="owner: christiannaths, repo: jquery.githubcode, path: src/jquery.githubcode.js, commit: 6089c601b49e456817365b96617949c6a3b05fdc"></code>
+
+
+    <script src="./javascripts/jquery.min.js"></script>
+  <script src="./javascripts/prism.js"></script>
+  <script src="./javascripts/jquery.githubcode.min.js"></script>
+  <script type="text/javascript">
+
+    $('.githubcode').githubcode({
+      afterInsert: function($element){
+        Prism.highlightAll();
+      }
+    });
+
+  </script>
+</body>
+</html>

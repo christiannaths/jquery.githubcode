@@ -1,328 +1,198 @@
-/*!
- * jQuery Github Code
- * Author: @christiannaths
- * URL: christiannaths.com
- * Licensed under the MIT license
- */
-
-// var properties = string.split(', ');
-// var obj = {};
-// properties.forEach(function(property) {
-//     var tup = property.split(':');
-//     obj[tup[0]] = tup[1];
-// });
-
 ;(function ( $, window, document, undefined ) {
+  // A couple of utilites
+  var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(a){var c,d,e,f,g,h,i,b="",j=0;for(a=Base64._utf8_encode(a);a.length>j;)c=a.charCodeAt(j++),d=a.charCodeAt(j++),e=a.charCodeAt(j++),f=c>>2,g=(3&c)<<4|d>>4,h=(15&d)<<2|e>>6,i=63&e,isNaN(d)?h=i=64:isNaN(e)&&(i=64),b=b+this._keyStr.charAt(f)+this._keyStr.charAt(g)+this._keyStr.charAt(h)+this._keyStr.charAt(i);return b},decode:function(a){var c,d,e,f,g,h,i,b="",j=0;for(a=a.replace(/[^A-Za-z0-9\+\/\=]/g,"");a.length>j;)f=this._keyStr.indexOf(a.charAt(j++)),g=this._keyStr.indexOf(a.charAt(j++)),h=this._keyStr.indexOf(a.charAt(j++)),i=this._keyStr.indexOf(a.charAt(j++)),c=f<<2|g>>4,d=(15&g)<<4|h>>2,e=(3&h)<<6|i,b+=String.fromCharCode(c),64!=h&&(b+=String.fromCharCode(d)),64!=i&&(b+=String.fromCharCode(e));return b=Base64._utf8_decode(b)},_utf8_encode:function(a){a=a.replace(/\r\n/g,"\n");for(var b="",c=0;a.length>c;c++){var d=a.charCodeAt(c);128>d?b+=String.fromCharCode(d):d>127&&2048>d?(b+=String.fromCharCode(192|d>>6),b+=String.fromCharCode(128|63&d)):(b+=String.fromCharCode(224|d>>12),b+=String.fromCharCode(128|63&d>>6),b+=String.fromCharCode(128|63&d))}return b},_utf8_decode:function(a){for(var b="",c=0,d=c1=c2=0;a.length>c;)d=a.charCodeAt(c),128>d?(b+=String.fromCharCode(d),c++):d>191&&224>d?(c2=a.charCodeAt(c+1),b+=String.fromCharCode((31&d)<<6|63&c2),c+=2):(c2=a.charCodeAt(c+1),c3=a.charCodeAt(c+2),b+=String.fromCharCode((15&d)<<12|(63&c2)<<6|63&c3),c+=3);return b}};
+  var Urlify={parse:function(a){var b=document.createElement("a");return b.href=a,b}};
 
-  $.fn.githubcode = function ( options ) {
+  var pluginName, defaults;
+  pluginName = "githubcode",
+  defaults = {
+    api: {
+      ref: 'master',
+      access_token: 'f23b79399a2c6fbb411643ce79ad60029c853b97',
+      request_host: "https://api.github.com/repos"
+    },
+    beforeInsert: function(){},
+    afterInsert: function(){}
+  };
 
-    options = $.extend( {}, $.fn.githubcode.options, options );
+  var GithubCode = function ( element, options ) {
+    var self = this;
+    var $element = $(element);
+    var request;
 
-    return this.each(function () {
-      var $this = $(this);
+    this.options = $.extend({}, defaults, options);
 
-      // Fallback to options in data- attributes
-      // store all merged options in data object
-      $.extend( $this.data(), options )
+    this.element = element;
+    this.$element = $element;
+    this.$inserted_elements;
+
+    this._defaults = defaults;
+    this._name = pluginName;
+
+    this.url = this.$element.data('url');
+    this.api = this.$element.data('api');
+
+    this.init();
+    request = this.githubRequest(this.api.request_url);
+    request.done( this.options.beforeInsert );
+    request.done( function(data){
+      self.$inserted_elements = self.insert(data, $element, self);
+    });
+    request.done( function(data){
+      // console.log($inserted_elements.hasClass('.language-unknown'))
+      self.options.afterInsert(self.$inserted_elements);
+    });
+    request.fail( function(request, msg) {
+      $(element).replaceWith(
+        $('<pre></pre>').text( request.status + " " + msg )
+      );
+    })
+  }
 
 
+  // Our constuctor function
+  GithubCode.prototype = {
+    init: function() {
+      this.api = this.parseParams();
+    },
 
-      var hasPath = typeof $this.data('path') !== 'undefined';
-      var hasRef = typeof $this.data('ref') !== 'undefined';
-      var sha1Test = /^[0-9a-f]{40}$/i;
-      var refIsHash = sha1Test.test($this.data('ref'));
+    githubRequest: function(request_url){
+      var request = new $.Deferred;;
+      if( request_url) {
+        request = $.get( request_url );
+      } else {
+        request.reject({status: "403 rejected:"}, "Cannot process this URL");
+      };
+      return request;
+    },
 
-      var isFullCommit = !hasPath && hasRef && refIsHash;
-      var isSingleFileCommit = hasPath && hasRef && refIsHash;
-      var isSingleFileHEAD = hasPath && !refIsHash;
+    insert: function(data, $element, self){
+      var $elements = $([]);
+      var content = self.gatherContent(data, self);
 
+      $.each(content.files, function(i, file){
+        var $pre = $('<pre/>');
+        var $code = $('<code/>');
 
-      // Main logic block, deterine which calls to make
-      // to the Github API.
-      if ( !hasPath && hasRef && refIsHash ) {
-        // get diffs for all files for a single commit
-        $this.getCommitDiffs();
+        $pre = $pre.clone();
+        $code = $code.clone();
+        $code.text( file.content );
+        $pre.addClass('language-'+ file.language);
+        $pre.addClass('lang-'+ file.language);
+        $pre.attr('data-language', file.language);
+        $pre.attr('data-lang', file.language);
+        $pre.append($code);
+        $elements = $elements.add($pre);
+        $element.before( $pre );
+      });
 
-      } else if (hasPath && hasRef && refIsHash) {
-        // getting diff of single file for a single commit
-        $this.getCommitDiffs( $this.data('path') );
+      $element.remove();
 
-      } else if (hasPath && !refIsHash) {
-        // get all code for a single file on a specified branch
-        $this.getFile();
+      return $elements;
+    },
 
+    gatherContent: function(data, self){
+      var output = { files: [] };
+      var files = [];
+
+      if( data.files ){
+        files = data.files;
+      } else {
+        files.push(data);
       };
 
+      $.map(files, function(file){
+        tmp = {}
+        tmp.filename = file.filename || file.path;
+        tmp.content = file.patch || Base64.decode(file.content),
+        tmp.language = self.detectLanguage(tmp.filename)
+        output.files.push(tmp)
+      });
 
+      return output;
+    },
 
+    detectLanguage: function(filename){
+      var ext = filename.split('.').pop();
+      var languages = {
+        'js'      : 'javascript',
+        'css'     : 'css',
+        'sass'    : 'sass',
+        'scss'    : 'scss',
+        'html'    : 'markup',
+        'md'      : 'markup',
+        'svg'     : 'markup',
+        'coffee'  : 'coffeescript',
+        'php'     : 'php'
+      }
+
+      return languages[ext];
+    },
+
+    parseParams: function(){
+      if (this.url){
+        return this.parseUrlParams(this.url)
+      } else if (this.api){
+        return this.parseApiParams()
+      };
+    },
+
+    parseUrlParams: function(input){
+      var url = Urlify.parse(input);
+      var segments = url.pathname.split('/');
+      var output = {
+        token: this.options.api.access_token,
+        host: url.host,
+        full_path: url.pathname,
+        request_host: this.options.api.request_host
+      };
+
+      if( output.host === 'raw.github.com' ){
+        output.owner = segments[1];
+        output.repo = segments[2];
+        output.ref = segments[3];
+        output.path = segments.slice(4, segments.length).join('/');
+      } else {
+        output.owner = segments[1];
+        output.repo = segments[2];
+        output.method = segments[3];
+        output.ref = segments[4];
+        output.path = segments.slice(5, segments.length).join('/') || null;
+      };
+
+      if( output.method === "commit") {
+        output.request_url = [output.request_host, output.owner, output.repo, "commits", output.ref].join('/') + "?access_token=" + output.token;
+      } else if( output.path ) {
+        output.request_url = [output.request_host, output.owner, output.repo, "contents", output.path].join('/') + "?ref=" + output.ref + "&access_token=" + output.token;
+      } else {
+        output.request_url = null
+      };
+
+      return output;
+    },
+
+    parseApiParams: function(string_params) {
+      var tmp = {};
+      string_params = string_params.replace(/\s+/g, '');
+      string_params = string_params.split(',');
+      $.each(string_params, function(i, param){
+        param = param.split(':');
+        tmp[param[0]] = param[1];
+      });
+      tmp.ref = tmp.ref || defaults.api.ref;
+      return tmp;
+    }
+  };
+
+  $.fn[pluginName] = function ( options ) {
+    return this.each(function () {
+      if (!$.data(this, "plugin_" + pluginName)) {
+        $.data(this, "plugin_" + pluginName, new GithubCode( this, options ));
+      }
     });
   };
 
-    // Globally overriding options
-    // Here are our publicly accessible default plugin options
-    // that are available in case the user doesn't pass in all
-    // of the values expected. The user is given a default
-    // experience but can also override the values as necessary.
-    // eg. $fn.githubcode.key ='otherval';
-
-    $.fn.githubcode.options = {
-      'api': 'https://api.github.com/repos',
-      'debug': false,
-      afterInsert: function() {}
-    };
-
-    $.fn.extend({
-      getCommitDiffs: function( solo_file ) {
-
-
-        var $target = this;
-        var $this = this;
-        var method = 'commits';
-
-        var options = this.data();
-
-
-        var request_url = [options.api, options.repo, method, options.ref].join('/');
-
-        $.ajax({
-          'url':      request_url,
-          'type':     'GET',
-          'headers':  { 'Accept': 'application/vnd.github.v3.raw' },
-          'success':  function(response){
-            var files = $this.filter(response.files, solo_file);
-
-            $.each( files, function(index, file){
-
-              // TODO:
-              // go through each codeline and remove DIFF @@ -29,7 +29,7 @@ lines
-              // use the values there to determine counter offset and
-              // section counter reset. Probably should create a new
-              // section for each one, maybe span.numbered or something.
-
-              $this.data('path', file.filename)
-
-              var codelines = file.patch.split("\n")
-              // var offset = codelines.splice(0, 1)[0].match(/ \+(\d+)/)[1] || 0
-              var lang = $this.detectLanguage( file.filename );
-              var code = codelines.join('\n')
-
-
-              var $pre_tag = $('<pre/>');
-              var $code_tag = $('<code/>');
-              var $title_tag = $('<p/>').addClass('github-filename');
-
-              $title_tag.text(file.filename);
-              $title_tag.insertBefore($target);
-
-              // $code_tag.attr('data-linenumber', parseInt(offset));
-              $code_tag.attr('id', null)
-              $code_tag.attr('data-language', lang);
-              $code_tag.attr('data-lang', lang);
-              $code_tag.addClass('language-'+ lang);
-              $code_tag.addClass('lang-'+ lang);
-              $code_tag.text(code);
-
-              // console.log($code_tag.data())
-
-              $pre_tag.append($code_tag);
-              $pre_tag.insertBefore($target);
-
-              $this.highlight( $code_tag, method );
-
-
-            });
-
-            $target.remove();
-            // options.afterInsert.call(this);
-
-          }
-        });
-
-
-      },
-
-      getFile: function(){
-        var $target = this;
-        var $this = this;
-        var method = 'contents';
-        var options = this.data();
-
-        var request_url = [options.api, options.repo, method, options.path].join('/') + "?ref=" + (options.ref || 'master');
-
-        $.ajax({
-          'url':      request_url,
-          'type':     'GET',
-          'headers':  { 'Accept': 'application/vnd.github.v3.raw' },
-          'success':  function(response){
-
-            var code = response;
-            var lang = $this.detectLanguage( options.path );
-            var offset = 0;
-
-            var $pre_tag = $('<pre/>');
-            var $code_tag = $('<code/>');
-            var $title_tag = $('<p/>').addClass('github-filename');
-
-            $title_tag.text(options.path);
-            $title_tag.insertBefore($target);
-
-            $code_tag.attr('data-linenumber', parseInt(offset));
-            $code_tag.attr('id', null)
-            $code_tag.attr('data-language', lang);
-            $code_tag.attr('data-lang', lang);
-            $code_tag.addClass('language-'+ lang);
-            $code_tag.addClass('lang-'+ lang);
-            $code_tag.text(code);
-
-
-
-            $pre_tag.append($code_tag);
-
-            $pre_tag.insertBefore($target);
-            $target.remove();
-
-            $this.highlight( $code_tag, method );
-          }
-
-        });
-      },
-
-      detectLanguage: function( path ){
-        var file_ext = path.split('.').pop() || '';
-        var lang = this.data('language') || this.data('lang');
-
-        // console.log(this.data('language'))
-
-        if (typeof lang === 'undefined'){
-          switch(file_ext) {
-            case "js":
-              lang = "javascript";
-              break;
-            case "java":
-              lang = "java";
-              break;
-            case "css":
-              lang = "css";
-              break;
-            case "html":
-              lang = "html";
-              break;
-            default:
-              lang = "generic";
-          };
-        };
-        // this.data('language', lang);
-
-        // console.log(this)
-
-        return lang;
-
-
-      },
-
-      filter: function( files, solo_file ){
-        if (typeof solo_file !== 'undefined'){
-          files = files.filter(function (el) {
-            return el.filename === solo_file;
-          });
-        };
-
-        return files;
-      },
-
-      numberLines: function( $code_tag, method ){
-        var $this = this;
-        var options = $this.data();
-        var codeblock = $code_tag.text();
-        var isDiff = (method === 'commits');
-
-        var diffHunkRegex = /^\@\@\s\-(\d+)\,\d+\s\+(\d+)\,\d+\s\@\@/;
-        var removedLineRegex = /^\-/;
-        var addedLineRegex = /^\+/;
-
-        var linesAddedCounter = 0;
-        var linesRemovedCounter = 0;
-
-        var lines = codeblock.split('\n');
-
-        var codelines = $.map(lines, function(line, index) {
-          var codeline = new Object();
-          var offset = line.match(diffHunkRegex);
-          var removedLine = removedLineRegex.test(line);
-          var addedLine = addedLineRegex.test(line);
-
-          if (offset && isDiff) {
-            linesRemovedCounter = offset[1] - 1;
-            linesAddedCounter = offset[2] - 1;
-
-            codeline.text = ''
-            codeline.state = 'continue';
-            codeline.number = null;
-
-          } else if ( removedLine && isDiff ){
-            linesRemovedCounter ++;
-
-            codeline.text = ' '+ line.match(/^\-(.*)/)[1]
-            codeline.state = 'removed';
-            codeline.number = linesRemovedCounter;
-
-          } else if ( addedLine && isDiff ) {
-            linesAddedCounter++;
-
-            codeline.text = ' '+ line.match(/^\+(.*)/)[1]
-            codeline.number = linesAddedCounter;
-            codeline.state = 'added';
-
-          } else {
-            linesAddedCounter++;
-            linesRemovedCounter++;
-
-            codeline.text = line;
-            codeline.number = linesAddedCounter;
-            codeline.state = 'stale';
-          };
-
-          return codeline;
-        });
-
-        return codelines;
-      },
-
-      highlight: function( $code_tag, method ){
-        $this = this;
-        var options = $code_tag.data();
-        var codelines = $this.numberLines( $code_tag, method );
-
-        // console.log(options)
-
-        var codeblock = $.map(codelines, function(codeline, i){
-          return codeline.text;
-        }).join("\n");
-
-        if (typeof Rainbow !== 'undefined' ) {
-          Rainbow.color(codeblock, options.language, function(highlighted_block) {
-
-            var highlighted_lines = highlighted_block.split("\n");
-            var wrapped_lines = $.map(highlighted_lines, function(line, i){
-
-              var wrapped_line =
-                "<span class='line "+ codelines[i].state +"' style='counter-reset: linenumber "+ (codelines[i].number - 1) +";'>" +
-                  line +
-                "</span>";
-
-              return wrapped_line;
-            });
-
-            $code_tag.html(wrapped_lines.join("\n"));
-          });
-        }
-
-
-
-
-      }
-
-    });
+  // Self-execute the plugin
 
 
 })( jQuery, window, document );
