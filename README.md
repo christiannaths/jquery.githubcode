@@ -13,11 +13,11 @@ Show your code from any Github repo file or diff by simply dropping in an (almos
 + [jQuery](http://jquery.com)
 
 
-Include jquery & jquery.githubcode
+Include jquery & jquery.githubcode at the bottom of your page
 ```html
 
 <script type="text/javascript" src="jquery.min.js"></script>
-<script type="text/javascript" src="http://cdn.sitepress.cc.s3.amazonaws.com/libs/jquery.githubcode/jquery.githubcode.js"></script>
+<script type="text/javascript" src="jquery.githubcode.js"></script>
 ```
 
 
