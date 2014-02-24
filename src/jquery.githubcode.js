@@ -144,7 +144,7 @@
         'sass'    : 'sass',
         'scss'    : 'scss',
         'html'    : 'markup',
-        'htm '    : 'markup',
+        'htm'     : 'markup',
         'md'      : 'markup',
         'svg'     : 'markup',
         'coffee'  : 'coffeescript',
